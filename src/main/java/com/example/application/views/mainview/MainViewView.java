@@ -1,5 +1,6 @@
 package com.example.application.views.mainview;
 
+import com.example.application.MainView;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
@@ -21,7 +22,16 @@ public class MainViewView extends HorizontalLayout {
         name = new TextField("Your name");
         sayHello = new Button("Say hello");
         sayHello.addClickListener(e -> {
-            Notification.show("Hello " + name.getValue());
+            String str = name.getValue();
+            try {
+               // Notification.show(String.valueOf(MainView.zScore));
+                MainView test = new MainView(str);
+                Notification.show(String.valueOf(test.zScore));
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            //Notification.show("Hello " + name.getValue());
         });
 
         setMargin(true);
