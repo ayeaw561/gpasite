@@ -25,11 +25,11 @@ public class MainViewView extends VerticalLayout {
     private TextArea ta, ta1, ta2;
 
     public MainViewView() throws Exception{
-        name = new TextField("Your name");
-        sayHello = new Button("Say hello");
-        ta = new TextArea("");
-        ta1 = new TextArea("");
-        ta2 = new TextArea("");
+        name = new TextField("Class");
+        sayHello = new Button("GO");
+        ta = new TextArea("Z Score");
+        ta1 = new TextArea("Sample");
+        ta2 = new TextArea("Population");
         MainView run = new MainView();
         sayHello.addClickListener(e -> {
             String str = name.getValue();
