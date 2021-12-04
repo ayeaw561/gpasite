@@ -40,6 +40,12 @@ public class MainView {
     public static HashMap<String,Integer> PopulationMap = new HashMap<>();
     public static HashMap<String,Integer> SampleMap = new HashMap<>();
 
+    public MainView() throws Exception{
+        readNames("./AllGroups.txt");
+        readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
+
+    }
+    
     public MainView(String in) throws Exception{
         Integer n = Integer.parseInt(in);
 
@@ -47,11 +53,7 @@ public class MainView {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String read = "Y";
         
-        //reads and stores group files
-        readNames("./AllGroups.txt");
-
-        readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
-
+        //reads and stores group file
         //while(!read.toLowerCase().equals("n")){
 
         compareClass(scan, n);
