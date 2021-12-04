@@ -43,7 +43,6 @@ public class MainView {
     public MainView() throws Exception{
         readNames("./AllGroups.txt");
         readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
-
     }
     
     public MainView(String in) throws Exception{

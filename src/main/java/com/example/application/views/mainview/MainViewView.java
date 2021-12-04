@@ -3,6 +3,8 @@ package com.example.application.views.mainview;
 import com.example.application.MainView;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.charts.Chart;
+import com.vaadin.flow.component.charts.model.ChartType;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -25,6 +27,8 @@ public class MainViewView extends HorizontalLayout {
         sayHello = new Button("Say hello");
         ta = new TextArea("");
         MainView run = new MainView();
+        Chart chart = new Chart();
+        chart.getConfiguration().getChart().setType(ChartType.COLUMN);
         sayHello.addClickListener(e -> {
             String str = name.getValue();
             try {
@@ -41,9 +45,10 @@ public class MainViewView extends HorizontalLayout {
         });
 
         setMargin(true);
-        setVerticalComponentAlignment(Alignment.END, name, sayHello);
+        setVerticalComponentAlignment(Alignment.END, name, sayHello, ta);
 
-        add(name, sayHello, ta);
+        add(name, sayHello, ta, chart);
+     
     }
 
 }
