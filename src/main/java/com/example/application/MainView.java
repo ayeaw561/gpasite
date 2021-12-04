@@ -39,6 +39,7 @@ public class MainView {
     public static double zScore;
     public static HashMap<String,Integer> PopulationMap = new HashMap<>();
     public static HashMap<String,Integer> SampleMap = new HashMap<>();
+    public static Number[] sMap;
 
     public MainView() throws Exception{
         readNames("./AllGroups.txt");
@@ -265,6 +266,7 @@ public class MainView {
             populationMean(arrayPGPA);
             samplemean(arraySGPA);
             calculateSD(arrayPGPA);
+
             test();
             
         }
