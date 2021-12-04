@@ -64,7 +64,7 @@ public class MainViewView extends VerticalLayout {
         });
 
         setMargin(true);
-        setHorizontalComponentAlignment(Alignment.END, name, sayHello, ta, ta1, ta2, ta3, ta4);
+        setHorizontalComponentAlignment(Alignment.START, name, sayHello, ta, ta1, ta2, ta3, ta4);
 
         add(name, sayHello, ta, ta1, ta2, ta3, ta4);
      
