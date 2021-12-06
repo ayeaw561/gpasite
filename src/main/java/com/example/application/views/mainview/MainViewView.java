@@ -48,8 +48,9 @@ public class MainViewView extends VerticalLayout {
             String str = name.getValue();
             try {
                // Notification.show(String.valueOf(MainView.zScore));
-                MainView test = new MainView(str);
-    
+                MainView test = new MainView(str, false);
+                //MainViewView grp = new MainViewView(str);
+
                 ta.setValue(String.valueOf(test.zScore));
                 ta1.setValue(test.SampleMap.toString());
                 ta2.setValue(test.PopulationMap.toString());
@@ -64,8 +65,8 @@ public class MainViewView extends VerticalLayout {
         });
 
         setMargin(true);
-        setHorizontalComponentAlignment(Alignment.START, name, sayHello, ta, ta1, ta2, ta3, ta4);
-
+        setHorizontalComponentAlignment(Alignment.CENTER, name, sayHello, ta, ta1, ta2, ta3, ta4);
+        
         add(name, sayHello, ta, ta1, ta2, ta3, ta4);
      
     VerticalLayout content = new VerticalLayout(c1, c2, c3, c4, c5, c6, c7, c8, c9);
@@ -78,5 +79,4 @@ public class MainViewView extends VerticalLayout {
 
 
     }
-
 }

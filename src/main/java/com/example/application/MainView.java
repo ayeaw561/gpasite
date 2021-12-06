@@ -28,7 +28,7 @@ public class MainView {
     public static ArrayList<String> GroupData = new ArrayList<>();
     public static ArrayList<String> GroupNameArray = new ArrayList<>();
     public static NumberFormat form = new DecimalFormat("#0.000");
-
+    public static boolean check = true;
     public static ArrayList<String> arrayPopulation;
     public static ArrayList<String> arraySample;
     public static double[] arraySGPA;
@@ -46,17 +46,19 @@ public class MainView {
         readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
     }
     
-    public MainView(String in) throws Exception{
+    public MainView(String in, boolean bol) throws Exception{
         Integer n = Integer.parseInt(in);
-
+        check = bol;
         Scanner scan = new Scanner(System.in);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String read = "Y";
-        
+        if(check == false){
+            compareClass(scan, n);
+        }else{
+            compareGroup(scan, n);
+        }
         //reads and stores group file
         //while(!read.toLowerCase().equals("n")){
-
-        compareClass(scan, n);
     }
     /*public static void main(String[] args) throws Exception{
         Scanner scan = new Scanner(System.in);
@@ -86,9 +88,9 @@ public class MainView {
         //read = br.readLine();
         }*/
         
-        private static void compareGroup(Scanner scan) throws Exception{
+        private static void compareGroup(Scanner scan, Integer in) throws Exception{
             int name, n;
-            String fName;
+            String fName, fileName;
             File file2;
     
             for(int i = 0; i < GroupName.size(); i++){
@@ -110,8 +112,12 @@ public class MainView {
                 System.out.println("File: " + fName);
                 file2 = new File(fName);
                 }while(!file2.exists());*/
-    
-            //readGroupFile(fName, NameArray, GroupData);
+
+                fileName = GroupNameArray.get(in - 1);
+                readFiletoArray(fileName, SampleData);
+
+                fName = GroupName.get(in - 1);
+            readGroupFile(fName, NameArray, GroupData);
             //dispalying group data
             ztest(SampleData, GroupData);
             System.out.println("Group Data : ");
