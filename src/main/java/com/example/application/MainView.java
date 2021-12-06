@@ -1,10 +1,6 @@
 package com.example.application;
 
-import com.vaadin.flow.component.ClientCallable;
-import com.vaadin.flow.component.dependency.JavaScript;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.Route;
-
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -28,263 +24,192 @@ public class MainView {
     public static ArrayList<String> GroupData = new ArrayList<>();
     public static ArrayList<String> GroupNameArray = new ArrayList<>();
     public static NumberFormat form = new DecimalFormat("#0.000");
-    public static boolean check = true;
-    public static ArrayList<String> arrayPopulation;
-    public static ArrayList<String> arraySample;
     public static double[] arraySGPA;
     public static double[] arrayPGPA;
+    public static double[] arrayGGPA;
     public static double sampleMean; //section or group
     public static double popMean; //total popluation of data
     public static double popSD; //total population of data SD
     public static double zScore;
     public static HashMap<String,Integer> PopulationMap = new HashMap<>();
     public static HashMap<String,Integer> SampleMap = new HashMap<>();
-    public static Number[] sMap;
+    public static String sig = "";
 
-    public MainView() throws Exception{
-        readNames("./AllGroups.txt");
-        readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
-    }
+public MainView() throws Exception{
+    readNames("./AllGroups.txt");
+}
     
-    public MainView(String in, boolean bol) throws Exception{
-        Integer n = Integer.parseInt(in);
-        check = bol;
-        Scanner scan = new Scanner(System.in);
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String read = "Y";
-        if(check == false){
-            compareClass(scan, n);
+public MainView(String in) throws Exception{
+    Integer n = Integer.parseInt(in);
+    Scanner scan = new Scanner(System.in);
+        compareClass(scan, n);
+}
+
+public MainView(String in, String in2) throws Exception{
+    Scanner scan = new Scanner(System.in);
+    Integer n = Integer.parseInt(in);
+    Integer n2 = Integer.parseInt(in2);
+    compareGroup(scan, n, n2);
+}
+        
+    private static void compareGroup(Scanner scan, Integer in, Integer in2) throws Exception{
+        SampleData.clear();
+        GroupData.clear();
+        String fName, fileName;
+        readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
+        //comparing class to group
+        fileName = GroupNameArray.get(in-1);
+        readFiletoArray(fileName, SampleData);
+        fName = GroupName.get(in2-1);
+        readGroupFile(fName, NameArray, GroupData);
+        NameArray.clear();
+        //dispalying group data
+        ztestGrp(SampleData, GroupData);
+        sigfig();
+    }
+
+    private static void compareClass(Scanner scan, Integer in) throws Exception{
+        SampleData.clear();
+        String fileName;
+        readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
+        //prompts user to select a class to compare 
+        fileName = GroupNameArray.get(in - 1);
+        readFiletoArray(fileName, SampleData);
+            
+        //displaying class data
+        ztestClass(SampleData);
+        sigfig();
+    }
+
+    //Determines if zScore is significant
+    private static void sigfig(){
+        if(zScore < -2.0 || zScore > 2.0){
+            sig = "Z-score is significant!";
+            System.out.println("Z-score is significant!");
         }else{
-            compareGroup(scan, n);
+            sig = "Z-score is not significant!";
+            System.out.println("Z-score is not significant!");
         }
-        //reads and stores group file
-        //while(!read.toLowerCase().equals("n")){
     }
-    /*public static void main(String[] args) throws Exception{
-        Scanner scan = new Scanner(System.in);
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String read = "Y";
-        
-        //reads and stores group files
-        readNames("AllGroups.txt");
-
-        readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
-
-        //while(!read.toLowerCase().equals("n")){
-
-        //compareClass(scan);
-        
-        //prompts user compare selected class to a group
-       // System.out.print("Would you like to compare this class to another group? (Y/N)");
-      //  read = br.readLine();
-        //if(read.toLowerCase().equals("n")){
-      //      break;
-      //  }
-
-        //compareGroup(scan);
-
-        //prompts user to continue comparing
-        //System.out.print("Would you like to compare another? (Y/N)");
-        //read = br.readLine();
-        }*/
-        
-        private static void compareGroup(Scanner scan, Integer in) throws Exception{
-            int name, n;
-            String fName, fileName;
-            File file2;
     
-            for(int i = 0; i < GroupName.size(); i++){
-                n = i + 1;
-                String strin = GroupName.get(i);
-                System.out.println(n + ". " + strin);
-            }
+    //Collects group names from AllGroups.txt
+    private static void readNames(String name) throws Exception{
+        
+        FileInputStream fstream = new FileInputStream("./classes/"+name);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+        String strLine;
+
+        while ((strLine = br.readLine()) != null)   {
+            GroupName.add(strLine);
+        }
+
+        br.close();
+        fstream.close();
+    }
+    //reads in the group class to arraylist
+    private static void readFiletoArray(String name, ArrayList<String> array) throws Exception{
+
+        String[] col;
+        FileInputStream fstream = new FileInputStream("./classes/"+name);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+        String strLine;
+        br.readLine();
     
-            //comparing class to group
-            /*do{
-                System.out.println("\nEnter the group you would like to compare: (Enter a ##) ");
-                int j = GroupName.size();
-                name = check(scan);
-                while(!(name <= j && name > 0)){
-                    System.out.println("try again");
-                    name = check(scan);
-                }
-                fName = GroupName.get(name - 1);
-                System.out.println("File: " + fName);
-                file2 = new File(fName);
-                }while(!file2.exists());*/
-
-                fileName = GroupNameArray.get(in - 1);
-                readFiletoArray(fileName, SampleData);
-
-                fName = GroupName.get(in - 1);
-            readGroupFile(fName, NameArray, GroupData);
-            //dispalying group data
-            ztest(SampleData, GroupData);
-            System.out.println("Group Data : ");
-            System.out.println(PopulationMap.keySet().toString());
-            System.out.println(PopulationMap.values().toString());
-            System.out.println("Selected Class Data : ");
-            System.out.println(SampleMap.keySet().toString());
-            System.out.println(SampleMap.values().toString());
-            System.out.println("Calculations: ");
-            System.out.println("Compaired Z-Score: "+form.format(zScore));
-            System.out.println("Compaired Group Mean: "+form.format(popMean));
-            System.out.println("Compaired Class Mean: "+form.format(sampleMean));
-            System.out.println();
+        while ((strLine = br.readLine()) != null)   {
+    
+            strLine = strLine.replace((char)9, ',');
+            col = strLine.split("\\,", 5); // seperates data by colunm 
+            array.add(col[col.length-1]); 
         }
     
-        private static void compareClass(Scanner scan, Integer in) throws Exception{
-            String fileName;
-            File file;
-            int name, n;
+        br.close();
+        fstream.close();
     
-            for(int i = 0; i < GroupNameArray.size(); i++){
-                n = i + 1;
-                String strin = GroupNameArray.get(i);
-                System.out.println(n + ". " + strin);
-            }
-            //prompts user to select a class to compare 
-           /* do{
-                System.out.println("\nEnter the class you would like to compare to all COMSC programs: (Enter a ##) ");
-                int j = GroupNameArray.size();
-                name = check(scan);
-                while(!(name <= j && name > 0)){
-                    System.out.println("try again");
-                    name = check(scan);
-                }
     
-                fileName = GroupNameArray.get(name - 1);
-                System.out.println("File: " + fileName);
-                file = new File(fileName);
-                }while(!file.exists());*/
-                fileName = GroupNameArray.get(in - 1);
-        
-                readFiletoArray(fileName, SampleData);
-                
-                //displaying class data
-                ztest(SampleData, PopulationData);
-                System.out.println("Population Data : ");
-                System.out.println(PopulationMap.keySet().toString());
-                System.out.println(PopulationMap.values().toString());
-                System.out.println("Selected Class Data : ");
-                System.out.println(SampleMap.keySet().toString());
-                System.out.println(SampleMap.values().toString());
-                System.out.println("Calculations: ");
-                System.out.println("Compaired Z-Score: "+form.format(zScore));
-                System.out.println("Compaired Group Mean: "+form.format(popMean));
-                System.out.println("Compaired Class Mean: "+form.format(sampleMean));
-                System.out.println();
+    }
+    //reads in call glasses from group
+    private static void readGroupFile(String name, ArrayList<String> arraySz, ArrayList<String> arrayValues) throws Exception{
     
+        String[] col;
+        FileInputStream fstream = new FileInputStream("./classes/"+name);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+        String strLine;
+        br.readLine();
+    
+        while ((strLine = br.readLine()) != null)   {
+            arraySz.add(strLine);
         }
-    
-        //prompts user to try again if the file isnt found.
-        private static int check(Scanner scan){
-        while(!scan.hasNextInt()){
-            System.out.println("try again");
-                    scan.next();
-            }
-            return scan.nextInt();
-        }
-        
-    
-        private static void readNames(String name) throws Exception{
+
+        br.close();
+        fstream.close();
+
+        for(int i = 0; i < arraySz.size(); i++){
+            FileInputStream arrstream = new FileInputStream("./classes/"+arraySz.get(i));
+            BufferedReader ar = new BufferedReader(new InputStreamReader(arrstream));
+            String str;
+            ar.readLine();
             
-            FileInputStream fstream = new FileInputStream("./classes/"+name);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-            String strLine;
-    
-            while ((strLine = br.readLine()) != null)   {
-                GroupName.add(strLine);
+
+            while((str = ar.readLine()) != null){
+
+                str = str.replace((char)9, ',');
+                col = str.split("\\,", 5);
+                arrayValues.add(col[col.length-1]); 
             }
-    
-            br.close();
-            fstream.close();
+
         }
-        //reads in the group data
-        private static void readFiletoArray(String name, ArrayList<String> array) throws Exception{
-    
-            String[] col;
-            FileInputStream fstream = new FileInputStream("./classes/"+name);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-            String strLine;
-            br.readLine();
         
-            while ((strLine = br.readLine()) != null)   {
-        
-                strLine = strLine.replace((char)9, ',');
-                col = strLine.split("\\,", 5); // seperates data by colunm 
-                array.add(col[col.length-1]); 
-            }
-       
-            br.close();
-            fstream.close();
-        
-        
-        }
-        //reads in the class data
-        private static void readGroupFile(String name, ArrayList<String> arraySz, ArrayList<String> arrayValues) throws Exception{
-        
-            String[] col;
-            FileInputStream fstream = new FileInputStream("./classes/"+name);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-            String strLine;
-            br.readLine();
-        
-            while ((strLine = br.readLine()) != null)   {
-                arraySz.add(strLine);
-            }
-    
-            br.close();
-            fstream.close();
-    
-            for(int i = 0; i < arraySz.size(); i++){
-                FileInputStream arrstream = new FileInputStream("./classes/"+arraySz.get(i));
-                BufferedReader ar = new BufferedReader(new InputStreamReader(arrstream));
-                String str;
-                ar.readLine();
-                
-    
-                while((str = ar.readLine()) != null){
-    
-                    str = str.replace((char)9, ',');
-                    col = str.split("\\,", 5);
-                    arrayValues.add(col[col.length-1]); 
-                }
-    
-            }
-        }
+    }
+
+        //ZTEST
         //Ztest driver
-        public static void ztest(ArrayList<String> arraySam, ArrayList<String> arrayPop){
-            PopulationMap.clear();
-            SampleMap.clear();
-            arrayPopulation = arrayPop;
-            arraySample = arraySam;
-            double[] array = new double[arrayPopulation.size()];
-            double[] array2 = new double[arraySample.size()];
-            HashMap<String,Integer> PMap = new HashMap<>();
-            HashMap<String,Integer> SMap = new HashMap<>();
-            arrayPGPA = array;
-            arraySGPA = array2;
-            gpa(arrayPopulation, arrayPGPA, PMap);
-            PopulationMap = sortByValue(PMap);
-            gpa(arraySample, arraySGPA, SMap);
-            SampleMap = sortByValue(SMap);
-            populationMean(arrayPGPA);
-            samplemean(arraySGPA);
-            calculateSD(arrayPGPA);
+    public static void ztestGrp(ArrayList<String> arraySam, ArrayList<String> arrayGrp){
+        PopulationMap.clear();
+        SampleMap.clear();
+        System.out.println(PopulationMap.toString());
+        System.out.println(SampleMap.toString());
+        arrayGGPA = new double[arrayGrp.size()];
+        arraySGPA = new double[arraySam.size()];
+        gpa(arrayGrp, arrayGGPA, PopulationMap);
+        PopulationMap = sortByValue(PopulationMap);
+        gpa(arraySam, arraySGPA, SampleMap);
+        SampleMap = sortByValue(SampleMap);
+        System.out.println(PopulationMap.toString());
+        System.out.println(SampleMap.toString());
+        populationMean(arrayGGPA);
+        samplemean(arraySGPA);
+        calculateSD(arrayGGPA);
+        test();
+        PopulationData.clear();
+        GroupNameArray.clear();
+    }
 
-            test();
-            
-        }
+    public static void ztestClass(ArrayList<String> arraySam){
+        PopulationMap.clear();
+        SampleMap.clear();
+        System.out.println(PopulationMap.toString());
+        System.out.println(SampleMap.toString());
+        arrayPGPA = new double[PopulationData.size()];
+        arraySGPA = new double[arraySam.size()];
+        gpa(PopulationData, arrayPGPA, PopulationMap);
+        PopulationMap = sortByValue(PopulationMap);
+        gpa(arraySam, arraySGPA, SampleMap);
+        SampleMap = sortByValue(SampleMap);
+        System.out.println(PopulationMap.toString());
+        System.out.println(SampleMap.toString());
+        populationMean(arrayPGPA);
+        samplemean(arraySGPA);
+        calculateSD(arrayPGPA);
+        test();
+        PopulationData.clear();
+        GroupNameArray.clear();
+    }
     
-        public static void setZscore(double z){
-            zScore = z;
-        }
-    
+        //ztest calculation
         public static void test(){
             zScore = (popMean - sampleMean)/ popSD;
         }
-    
+        //finds sample mean
         public static void samplemean(double[] array)
         {
             double sum = 0;
@@ -294,6 +219,7 @@ public class MainView {
             }
             sampleMean = sum/length;
         }
+        //finds population/group mean
         public static void populationMean(double[] array)
         {
             double sum = 0;
@@ -303,7 +229,7 @@ public class MainView {
             }
             popMean = sum/length;
         }
-    
+        //calculates standard deviation
         public static void calculateSD(double arrayNum[])
         {
             double sum = 0.0, standardDeviation = 0.0;
@@ -321,7 +247,7 @@ public class MainView {
     
             popSD = Math.sqrt(standardDeviation/length);
         }
-    
+        //Sorts each HashMap by value greatest-least
         public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hashmap)
         {
             List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(hashmap.entrySet());
@@ -342,7 +268,8 @@ public class MainView {
             }
             return temp;
         }
-    
+        //Sets maps with values and keys
+        //Sets arrays with numerical grade equivalents
         public static void gpa(ArrayList<String> arrayl, double[] arraylVal, HashMap<String, Integer> map){
             int value = 0;
             for(int i = 0; i < arrayl.size(); i++){
