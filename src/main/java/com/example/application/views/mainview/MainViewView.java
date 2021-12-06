@@ -1,5 +1,7 @@
 package com.example.application.views.mainview;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +24,13 @@ import com.vaadin.flow.router.RouteAlias;
 public class MainViewView extends VerticalLayout {
 
     private TextField name;
-    private Button sayHello;
+    private Button btn;
     private TextArea ta, ta1, ta2, ta3, ta4;
+    private NumberFormat form = new DecimalFormat("#0.000");
 
     public MainViewView() throws Exception{
         name = new TextField("Enter Class 1-9");
-        sayHello = new Button("GO");
+        btn = new Button("GO");
         ta = new TextArea("Z Score");
         ta1 = new TextArea("Sample");
         ta2 = new TextArea("Population");
@@ -44,18 +47,18 @@ public class MainViewView extends VerticalLayout {
         Span c9 = new Span("10 = ComSc492_02.SEC");
         
         MainView run = new MainView();
-        sayHello.addClickListener(e -> {
+        btn.addClickListener(e -> {
             String str = name.getValue();
             try {
                // Notification.show(String.valueOf(MainView.zScore));
                 MainView test = new MainView(str, false);
                 //MainViewView grp = new MainViewView(str);
 
-                ta.setValue(String.valueOf(test.zScore));
+                ta.setValue(String.valueOf(form.format(test.zScore)));
                 ta1.setValue(test.SampleMap.toString());
                 ta2.setValue(test.PopulationMap.toString());
-                ta3.setValue(String.valueOf(test.sampleMean));
-                ta4.setValue(String.valueOf(test.popMean));
+                ta3.setValue(String.valueOf(form.format(test.sampleMean)));
+                ta4.setValue(String.valueOf(form.format(test.popMean)));
                 //Notification.show();
             } catch (Exception e1) {
                 // TODO Auto-generated catch block
@@ -65,18 +68,15 @@ public class MainViewView extends VerticalLayout {
         });
 
         setMargin(true);
-        setHorizontalComponentAlignment(Alignment.CENTER, name, sayHello, ta, ta1, ta2, ta3, ta4);
-        
-        add(name, sayHello, ta, ta1, ta2, ta3, ta4);
-     
-    VerticalLayout content = new VerticalLayout(c1, c2, c3, c4, c5, c6, c7, c8, c9);
+        setHorizontalComponentAlignment(Alignment.START, name, btn, ta, ta1, ta2, ta3, ta4);
+        VerticalLayout content = new VerticalLayout(c1, c2, c3, c4, c5, c6, c7, c8, c9);
         content.setSpacing(false);
         content.setPadding(false);
-    Details details = new Details("Classes", content);
+        Details details = new Details("Classes", content);
         details.setOpened(true);
-
-        add(details);
-
-
+        HorizontalLayout classL = new HorizontalLayout(name, details);
+        HorizontalLayout hl = new HorizontalLayout(ta1, ta2);
+        HorizontalLayout hL = new HorizontalLayout(ta3, ta4);
+        add(classL, btn, ta, hl, hL);
     }
 }

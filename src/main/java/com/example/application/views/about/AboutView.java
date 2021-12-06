@@ -1,5 +1,6 @@
 package com.example.application.views.about;
-
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import com.example.application.MainView;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.html.H2;
@@ -16,20 +17,21 @@ import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@PageTitle("About")
+@PageTitle("Group")
 @Route(value = "about", layout = MainLayout.class)
 public class AboutView extends VerticalLayout {
 
  
 
     private TextField name, name2;
-    private Button sayHello;
+    private Button btn;
     private TextArea ta, ta1, ta2, ta3, ta4;
+    private NumberFormat form = new DecimalFormat("#0.000");
 
     public AboutView() throws Exception{
         name = new TextField("Enter Class 1-9");
         name2 = new TextField("Enter Group 1-3");
-        sayHello = new Button("GO");
+        btn = new Button("GO");
         ta = new TextArea("Z Score");
         ta1 = new TextArea("Sample");
         ta2 = new TextArea("Group");
@@ -50,42 +52,43 @@ public class AboutView extends VerticalLayout {
         Span g9 = new Span("2 = COMSCProgram.GRP");
 
         MainView run = new MainView();
-        sayHello.addClickListener(e -> {
+        btn.addClickListener(e -> {
             String str = name.getValue();
             try {
-               // Notification.show(String.valueOf(MainView.zScore));
+            
                 MainView test = new MainView(str, true);
-                //MainViewView grp = new MainViewView(str);
-
-                ta.setValue(String.valueOf(test.zScore));
+                ta.setValue(String.valueOf(form.format(test.zScore)));
                 ta1.setValue(test.SampleMap.toString());
                 ta2.setValue(test.PopulationMap.toString());
-                ta3.setValue(String.valueOf(test.sampleMean));
-                ta4.setValue(String.valueOf(test.popMean));
-                //Notification.show();
+                ta3.setValue(String.valueOf(form.format(test.sampleMean)));
+                ta4.setValue(String.valueOf(form.format(test.popMean)));
+                
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
+                
                 e1.printStackTrace();
             }
-            //Notification.show("Hello " + name.getValue());
+            
         });
 
         setMargin(true);
-        setHorizontalComponentAlignment(Alignment.START, name, sayHello, ta, ta1, ta2, ta3, ta4);
-
-        add(name, name2, sayHello, ta, ta1, ta2, ta3, ta4);
-    VerticalLayout gcontent = new VerticalLayout(g7, g8, g9);
-    gcontent.setSpacing(false);
-    gcontent.setPadding(false);
-Details gdetails = new Details("Groups", gcontent);
-    gdetails.setOpened(true);
-    VerticalLayout content = new VerticalLayout(c1, c2, c3, c4, c5, c6, c7, c8, c9);
+        setHorizontalComponentAlignment(Alignment.START, name, name2, btn, ta, ta1, ta2, ta3, ta4);
+        VerticalLayout content = new VerticalLayout(c1, c2, c3, c4, c5, c6, c7, c8, c9);
         content.setSpacing(false);
         content.setPadding(false);
-    Details details = new Details("Classes", content);
+        Details details = new Details("Classes", content);
         details.setOpened(true);
+        HorizontalLayout classL = new HorizontalLayout(name, details);
+        add(classL);
 
-        add(details, gdetails);
+        VerticalLayout gcontent = new VerticalLayout(g7, g8, g9);
+        gcontent.setSpacing(false);
+        gcontent.setPadding(false);
+        Details gdetails = new Details("Groups", gcontent);
+        gdetails.setOpened(true);
+        HorizontalLayout groupL = new HorizontalLayout(name2, gdetails);
+        HorizontalLayout hl = new HorizontalLayout(ta1, ta2);
+        HorizontalLayout hL = new HorizontalLayout(ta3, ta4);
+        add(groupL, btn, ta, hl, hL);
 
     }
 

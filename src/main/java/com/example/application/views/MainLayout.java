@@ -108,9 +108,9 @@ public class MainLayout extends AppLayout {
 
     private List<RouterLink> createLinks() {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
-                new MenuItemInfo("MainView", "la la-globe", MainViewView.class), //
+                new MenuItemInfo("Class", "la la-globe", MainViewView.class), //
 
-                new MenuItemInfo("About", "la la-file", AboutView.class), //
+                new MenuItemInfo("Group", "la la-globe", AboutView.class), //
 
         };
         List<RouterLink> links = new ArrayList<>();
