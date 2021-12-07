@@ -60,15 +60,11 @@ public class MainViewView extends VerticalLayout {
         btn.addClickListener(e -> {
             String str = name.getValue();
             try {
-               // Notification.show(String.valueOf(MainView.zScore));
                 MainView test = new MainView(str);
-                //MainViewView grp = new MainViewView(str);
                 
                 ta.setValue(String.valueOf(form.format(test.zScore)));
-
-                ta6.setValue(String.valueOf(test.totalP));
-                ta7.setValue(String.valueOf(test.totalS));
-
+                ta7.setValue(String.valueOf(test.totalP));
+                ta6.setValue(String.valueOf(test.totalS));
                 ta5.setValue(test.sig);
                 ta1.setValue(test.SampleMap.toString());
                 ta2.setValue(test.PopulationMap.toString());
