@@ -48,6 +48,13 @@ public class AboutView extends VerticalLayout {
         Span g8 = new Span("2 = Senior_Design.GRP");
         Span g9 = new Span("3 = COMSCProgram.GRP");
 
+        ta.setReadOnly(true);
+        ta1.setReadOnly(true);
+        ta3.setReadOnly(true);
+        ta2.setReadOnly(true);
+        ta4.setReadOnly(true);
+        ta5.setReadOnly(true);
+
         MainView run = new MainView();
         btn.addClickListener(e -> {
             String str = name.getValue();

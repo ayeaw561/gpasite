@@ -43,6 +43,13 @@ public class MainViewView extends VerticalLayout {
         Span c7 = new Span("7 = ComSc490_01.SEC");
         Span c8 = new Span("8 = ComSc492_01.SEC");
         Span c9 = new Span("9 = ComSc492_02.SEC");
+
+        ta.setReadOnly(true);
+        ta1.setReadOnly(true);
+        ta3.setReadOnly(true);
+        ta2.setReadOnly(true);
+        ta4.setReadOnly(true);
+        ta5.setReadOnly(true);
         
         MainView run = new MainView();
         btn.addClickListener(e -> {
