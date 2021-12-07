@@ -22,8 +22,9 @@ public class MainViewView extends VerticalLayout {
 
     private TextField name;
     private Button btn;
-    private TextArea ta, ta1, ta2, ta3, ta4, ta5;
+    private TextArea ta, ta1, ta2, ta3, ta4, ta5, ta6, ta7;
     private NumberFormat form = new DecimalFormat("#0.000");
+    //private static Integer counter = 0;
 
     public MainViewView() throws Exception{
         name = new TextField("Enter Class 1-9");
@@ -34,6 +35,8 @@ public class MainViewView extends VerticalLayout {
         ta3 = new TextArea("Sample Mean");
         ta4 = new TextArea("Population Mean");
         ta5 = new TextArea("Significance");
+        ta6 = new TextArea("Total Sample");
+        ta7 = new TextArea("Total Population");
         Span c1 = new Span("1 = ComSc234_01.SEC");
         Span c2 = new Span("2 = ComSc330_01.SEC");
         Span c3 = new Span("3 = ComSc330_02.SEC");
@@ -50,6 +53,8 @@ public class MainViewView extends VerticalLayout {
         ta2.setReadOnly(true);
         ta4.setReadOnly(true);
         ta5.setReadOnly(true);
+        ta6.setReadOnly(true);
+        ta7.setReadOnly(true);
         
         MainView run = new MainView();
         btn.addClickListener(e -> {
@@ -58,8 +63,12 @@ public class MainViewView extends VerticalLayout {
                // Notification.show(String.valueOf(MainView.zScore));
                 MainView test = new MainView(str);
                 //MainViewView grp = new MainViewView(str);
-
+                
                 ta.setValue(String.valueOf(form.format(test.zScore)));
+
+                ta6.setValue(String.valueOf(test.totalP));
+                ta7.setValue(String.valueOf(test.totalS));
+
                 ta5.setValue(test.sig);
                 ta1.setValue(test.SampleMap.toString());
                 ta2.setValue(test.PopulationMap.toString());
@@ -67,25 +76,28 @@ public class MainViewView extends VerticalLayout {
                 ta4.setValue(String.valueOf(form.format(test.popMean)));
                 test.PopulationMap.clear();
                 test.SampleMap.clear();
-                //Notification.show();
+                
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
+                
                 e1.printStackTrace();
             }
-            //Notification.show("Hello " + name.getValue());
+            
         });
 
         setMargin(true);
-        setHorizontalComponentAlignment(Alignment.START, name, btn, ta, ta1, ta2, ta3, ta4);
+        setHorizontalComponentAlignment(Alignment.START, name, btn, ta, ta1, ta2, ta3, ta4, ta5, ta6, ta7);
         VerticalLayout content = new VerticalLayout(c1, c2, c3, c4, c5, c6, c7, c8, c9);
         content.setSpacing(false);
         content.setPadding(false);
         Details details = new Details("Classes", content);
         details.setOpened(false);
-        HorizontalLayout classL = new HorizontalLayout(name, details);
-        HorizontalLayout hl = new HorizontalLayout(ta1, ta2);
-        HorizontalLayout hL = new HorizontalLayout(ta3, ta4);
-        HorizontalLayout h = new HorizontalLayout(ta, ta5);
-        add(classL, btn, h, hl, hL);
+        VerticalLayout v = new VerticalLayout(ta6, ta7);
+        VerticalLayout v2 = new VerticalLayout(name, details);
+        HorizontalLayout classL = new HorizontalLayout(v2, v);
+        HorizontalLayout hMap = new HorizontalLayout(ta1, ta2);
+        HorizontalLayout hMean = new HorizontalLayout(ta3, ta4);
+        HorizontalLayout hScore = new HorizontalLayout(ta, ta5);
+        
+        add(classL, btn, hScore, hMap, hMean);
     }
 }

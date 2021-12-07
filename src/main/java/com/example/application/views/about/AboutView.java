@@ -7,6 +7,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.*;
@@ -21,7 +22,7 @@ public class AboutView extends VerticalLayout {
 
     private TextField name, name2;
     private Button btn;
-    private TextArea ta, ta1, ta2, ta3, ta4, ta5;
+    private TextArea ta, ta1, ta2, ta3, ta4, ta5, ta6, ta7;
     private NumberFormat form = new DecimalFormat("#0.000");
 
     public AboutView() throws Exception{
@@ -34,6 +35,8 @@ public class AboutView extends VerticalLayout {
         ta3 = new TextArea("Sample Mean");
         ta4 = new TextArea("Group Mean");
         ta5 = new TextArea("Significance");
+        ta7 = new TextArea("Total Sample");
+        ta6 = new TextArea("Total Group");
         Span c1 = new Span("1 = ComSc234_01.SEC");
         Span c2 = new Span("2 = ComSc330_01.SEC");
         Span c3 = new Span("3 = ComSc330_02.SEC");
@@ -54,6 +57,8 @@ public class AboutView extends VerticalLayout {
         ta2.setReadOnly(true);
         ta4.setReadOnly(true);
         ta5.setReadOnly(true);
+        ta6.setReadOnly(true);
+        ta7.setReadOnly(true);
 
         MainView run = new MainView();
         btn.addClickListener(e -> {
@@ -62,6 +67,10 @@ public class AboutView extends VerticalLayout {
             try {
             
                 MainView test = new MainView(str, str1);
+               
+                ta6.setValue(String.valueOf(test.totalG));
+                ta7.setValue(String.valueOf(test.totalS));
+
                 ta.setValue(String.valueOf(form.format(test.zScore)));
                 ta5.setValue(test.sig);
                 ta1.setValue(test.SampleMap.toString());
@@ -71,20 +80,20 @@ public class AboutView extends VerticalLayout {
                 test.PopulationMap.clear();
                 test.SampleMap.clear();
             } catch (Exception e1) {
-                
-                e1.printStackTrace();
+                Notification.show("Oh No");
+                //e1.printStackTrace();
             }
             
         });
 
         setMargin(true);
-        setHorizontalComponentAlignment(Alignment.START, name, name2, btn, ta, ta5, ta1, ta2, ta3, ta4);
+        setHorizontalComponentAlignment(Alignment.START, name, name2, btn, ta, ta5, ta1, ta2, ta3, ta4, ta6, ta7);
         VerticalLayout content = new VerticalLayout(c1, c2, c3, c4, c5, c6, c7, c8, c9);
         content.setSpacing(false);
         content.setPadding(false);
         Details details = new Details("Classes", content);
         details.setOpened(false);
-        HorizontalLayout classL = new HorizontalLayout(name, details);
+        HorizontalLayout classL = new HorizontalLayout(name, details, ta7);
         add(classL);
 
         VerticalLayout gcontent = new VerticalLayout(g7, g8, g9);
@@ -92,11 +101,12 @@ public class AboutView extends VerticalLayout {
         gcontent.setPadding(false);
         Details gdetails = new Details("Groups", gcontent);
         gdetails.setOpened(false);
-        HorizontalLayout groupL = new HorizontalLayout(name2, gdetails);
-        HorizontalLayout hl = new HorizontalLayout(ta1, ta2);
-        HorizontalLayout hL = new HorizontalLayout(ta3, ta4);
-        HorizontalLayout h = new HorizontalLayout(ta, ta5);
-        add(groupL, btn, h, hl, hL);
+        HorizontalLayout groupL = new HorizontalLayout(name2, gdetails, ta6);
+        HorizontalLayout hMap = new HorizontalLayout(ta1, ta2);
+        HorizontalLayout hMean = new HorizontalLayout(ta3, ta4);
+        HorizontalLayout hScore = new HorizontalLayout(ta, ta5);
+        
+       add(groupL, btn, hScore, hMap, hMean);
 
     }
 

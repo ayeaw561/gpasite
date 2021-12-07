@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.lang.String;
 
-@Route // localhost:8080/
+@Route(value = "Ztest")
 public class MainView {
     public static ArrayList<String> NameArray = new ArrayList<>();
     public static ArrayList<String> GroupName = new ArrayList<>();
@@ -34,6 +34,7 @@ public class MainView {
     public static HashMap<String,Integer> PopulationMap = new HashMap<>();
     public static HashMap<String,Integer> SampleMap = new HashMap<>();
     public static String sig = "";
+    public static Integer totalP, totalS, totalG;
 
 public MainView() throws Exception{
     readNames("./AllGroups.txt");
@@ -57,11 +58,17 @@ public MainView(String in, String in2) throws Exception{
         GroupData.clear();
         String fName, fileName;
         readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
+        totalP = PopulationData.size();
+        System.out.println(totalP);
         //comparing class to group
         fileName = GroupNameArray.get(in-1);
         readFiletoArray(fileName, SampleData);
+        totalS = SampleData.size();
+        System.out.println(totalS);
         fName = GroupName.get(in2-1);
         readGroupFile(fName, NameArray, GroupData);
+        totalG = GroupData.size();
+        System.out.println(totalG);
         NameArray.clear();
         //dispalying group data
         ztestGrp(SampleData, GroupData);
@@ -72,10 +79,11 @@ public MainView(String in, String in2) throws Exception{
         SampleData.clear();
         String fileName;
         readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
+        totalP = PopulationData.size();
         //prompts user to select a class to compare 
         fileName = GroupNameArray.get(in - 1);
         readFiletoArray(fileName, SampleData);
-            
+        totalS = SampleData.size();
         //displaying class data
         ztestClass(SampleData);
         sigfig();
