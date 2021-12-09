@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.lang.String;
 
-@Route(value = "Ztest")
+@Route(value = "Ztest")//localhost:8080
 public class MainView {
     public static ArrayList<String> NameArray = new ArrayList<>();
     public static ArrayList<String> GroupName = new ArrayList<>();
@@ -59,16 +59,16 @@ public MainView(String in, String in2) throws Exception{
         String fName, fileName;
         readGroupFile("COMSCprogram.GRP", GroupNameArray, PopulationData);
         totalP = PopulationData.size();
-        System.out.println(totalP);
+        
         //comparing class to group
         fileName = GroupNameArray.get(in-1);
         readFiletoArray(fileName, SampleData);
         totalS = SampleData.size();
-        System.out.println(totalS);
+      
         fName = GroupName.get(in2-1);
         readGroupFile(fName, NameArray, GroupData);
         totalG = GroupData.size();
-        System.out.println(totalG);
+       
         NameArray.clear();
         //dispalying group data
         ztestGrp(SampleData, GroupData);
@@ -93,10 +93,10 @@ public MainView(String in, String in2) throws Exception{
     private static void sigfig(){
         if(zScore < -2.0 || zScore > 2.0){
             sig = "Z-score is significant!";
-            System.out.println("Z-score is significant!");
+            
         }else{
             sig = "Z-score is not significant!";
-            System.out.println("Z-score is not significant!");
+           
         }
     }
     
@@ -174,20 +174,21 @@ public MainView(String in, String in2) throws Exception{
     public static void ztestGrp(ArrayList<String> arraySam, ArrayList<String> arrayGrp){
         PopulationMap.clear();
         SampleMap.clear();
-        System.out.println(PopulationMap.toString());
-        System.out.println(SampleMap.toString());
+   
         arrayGGPA = new double[arrayGrp.size()];
         arraySGPA = new double[arraySam.size()];
+
         gpa(arrayGrp, arrayGGPA, PopulationMap);
         PopulationMap = sortByValue(PopulationMap);
+
         gpa(arraySam, arraySGPA, SampleMap);
         SampleMap = sortByValue(SampleMap);
-        System.out.println(PopulationMap.toString());
-        System.out.println(SampleMap.toString());
+
         populationMean(arrayGGPA);
         samplemean(arraySGPA);
         calculateSD(arrayGGPA);
         test();
+
         PopulationData.clear();
         GroupNameArray.clear();
     }
@@ -195,20 +196,21 @@ public MainView(String in, String in2) throws Exception{
     public static void ztestClass(ArrayList<String> arraySam){
         PopulationMap.clear();
         SampleMap.clear();
-        System.out.println(PopulationMap.toString());
-        System.out.println(SampleMap.toString());
+        
         arrayPGPA = new double[PopulationData.size()];
         arraySGPA = new double[arraySam.size()];
+
         gpa(PopulationData, arrayPGPA, PopulationMap);
         PopulationMap = sortByValue(PopulationMap);
+
         gpa(arraySam, arraySGPA, SampleMap);
         SampleMap = sortByValue(SampleMap);
-        System.out.println(PopulationMap.toString());
-        System.out.println(SampleMap.toString());
+        
         populationMean(arrayPGPA);
         samplemean(arraySGPA);
         calculateSD(arrayPGPA);
         test();
+        
         PopulationData.clear();
         GroupNameArray.clear();
     }
